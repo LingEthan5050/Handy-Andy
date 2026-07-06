@@ -3,8 +3,6 @@ import { useEffect } from 'react';
 
 export default function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>('.reveal');
-    if (!els.length) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -18,7 +16,31 @@ export default function useReveal() {
       },
       { threshold: 0.1 }
     );
-    els.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+
+    const observe = (el: Element) => {
+      if (el.classList.contains('reveal')) {
+        observer.observe(el as HTMLElement);
+      }
+      el.querySelectorAll('.reveal').forEach((child) => observer.observe(child as HTMLElement));
+    };
+
+    // Initial scan
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el as HTMLElement));
+
+    // Observe dynamic additions
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof HTMLElement) observe(node);
+        });
+      });
+    });
+
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+    };
   }, []);
 }
