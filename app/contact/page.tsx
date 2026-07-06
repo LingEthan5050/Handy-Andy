@@ -35,7 +35,6 @@ export default function ContactPage() {
 
   return (
     <div style={{ background: 'var(--cream)' }}>
-      <Navbar />
 
       {/* Header */}
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: '5rem 1.5rem 4rem', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'center' }} className="contact-header">
@@ -179,7 +178,6 @@ export default function ContactPage() {
         `}</style>
       </section>
 
-      <Footer />
     </div>
   );
 }

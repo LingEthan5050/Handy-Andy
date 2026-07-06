@@ -20,7 +20,6 @@ export default function AboutPage() {
   useReveal();
   return (
     <div style={{ background: 'var(--cream)' }}>
-      <Navbar />
 
       {/* Header */}
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: '5rem 1.5rem 5rem' }}>
@@ -134,7 +133,6 @@ export default function AboutPage() {
         }}>Get an Estimate</Link>
       </section>
 
-      <Footer />
     </div>
   );
 }

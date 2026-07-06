@@ -29,7 +29,6 @@ export default function HomePage() {
 
   return (
     <div style={{ background: 'var(--cream)' }}>
-      <Navbar />
 
       {/* ══════════ HERO ══════════ */}
       <section style={{ position: 'relative', background: '#1c1917', overflow: 'hidden', minHeight: '92vh', display: 'flex', alignItems: 'center' }}>
@@ -206,7 +205,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }
