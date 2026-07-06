@@ -38,14 +38,33 @@ export default function ContactPage() {
       <Navbar />
 
       {/* Header */}
-      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '5rem 1.5rem 4rem' }}>
-        <span className="pill reveal" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>Reach out</span>
-        <h1 className="serif reveal" data-delay="100" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 500, color: '#1c1917', lineHeight: 1.08, maxWidth: 640, margin: '0 0 1.25rem' }}>
-          Let's talk about your project.
-        </h1>
-        <p className="reveal" data-delay="200" style={{ fontSize: 16, color: '#78716c', lineHeight: 1.75, maxWidth: 500 }}>
-          Drop us a line or give us a call. We're happy to help and will respond within one business day.
-        </p>
+      <section style={{ maxWidth: 1200, margin: '0 auto', padding: '5rem 1.5rem 4rem', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'center' }} className="contact-header">
+        <div>
+          <span className="pill reveal" style={{ marginBottom: '1.25rem', display: 'inline-block' }}>Reach out</span>
+          <h1 className="serif reveal" data-delay="100" style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)', fontWeight: 500, color: '#1c1917', lineHeight: 1.08, maxWidth: 640, margin: '0 0 1.25rem' }}>
+            Let's talk about your project.
+          </h1>
+          <p className="reveal" data-delay="200" style={{ fontSize: 16, color: '#78716c', lineHeight: 1.75, maxWidth: 500 }}>
+            Drop us a line or give us a call. We're happy to help and will respond within one business day.
+          </p>
+        </div>
+
+        <div className="reveal" data-delay="300" style={{ height: 400, borderRadius: 20, overflow: 'hidden', boxShadow: '0 8px 32px rgba(28,25,23,.08)', border: '1px solid rgba(28,25,23,.06)' }}>
+          <iframe
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={`https://maps.google.com/maps?q=1225%20Johnson%20Ferry%20Road%2C%20Marietta%2C%20GA%2030068&t=&z=12&ie=UTF8&iwloc=&output=embed`}
+          ></iframe>
+        </div>
+        <style>{`
+          @media(max-width:767px){
+            .contact-header{grid-template-columns:1fr!important; gap: 3rem!important;}
+          }
+        `}</style>
       </section>
 
       {/* Main grid */}
