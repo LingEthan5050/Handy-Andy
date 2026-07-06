@@ -63,7 +63,7 @@ export default function ServicesPage() {
       {/* Services */}
       <section style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1.5rem 6rem' }}>
         {services.map((s, i) => (
-          <div key={s.title} className="reveal" data-delay={0}
+          <div key={s.title} data-delay={0}
             style={{
               display: 'grid',
               gridTemplateColumns: i % 2 === 0 ? '1.1fr 0.9fr' : '0.9fr 1.1fr',

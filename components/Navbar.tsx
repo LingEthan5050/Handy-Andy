@@ -14,6 +14,7 @@ const links = [
 export default function Navbar() {
   const [open,     setOpen]     = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -21,7 +22,14 @@ export default function Navbar() {
     window.addEventListener('scroll', fn, { passive: true });
     return () => window.removeEventListener('scroll', fn);
   }, []);
+  
   useEffect(() => setOpen(false), [pathname]);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = '/handyandylogo.png';
+    img.onerror = () => setLogoError(true);
+  }, []);
 
   return (
     <nav
@@ -37,15 +45,21 @@ export default function Navbar() {
 
         {/* Logo */}
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/handyandylogo.png" alt="HandyANDY" style={{ height: 40, width: 'auto' }}
-            onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-          <div>
-            <div style={{ fontSize: 10, letterSpacing: '0.18em', color: '#a8a29e', textTransform: 'uppercase', fontWeight: 500, lineHeight: 1 }}>Since 1995</div>
-            <div style={{ fontSize: 30, fontWeight:700, color: '#1c1917', lineHeight: 1.3 }}>
-              Handy<span style={{ color: '#c65b37' }}>ANDY</span>
+          {!logoError && (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/handyandylogo.png" alt="HandyANDY" style={{ height: 40, width: 'auto' }}
+                onError={() => setLogoError(true)} />
+            </>
+          )}
+          {logoError && (
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: '0.18em', color: '#a8a29e', textTransform: 'uppercase', fontWeight: 500, lineHeight: 1 }}>Since 1995</div>
+              <div style={{ fontSize: 30, fontWeight:700, color: '#1c1917', lineHeight: 1.3 }}>
+                Handy<span style={{ color: '#c65b37' }}>ANDY</span>
+              </div>
             </div>
-          </div>
+          )}
         </Link>
 
         {/* Desktop links */}
