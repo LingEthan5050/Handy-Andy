@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import useReveal from '@/components/useReveal';
+import CountUp from '@/components/CountUp';
 
 const HERO_IMG    = 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=85';
 const FOUNDER_IMG = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=85';
@@ -18,10 +19,10 @@ const services = [
 ];
 
 const stats = [
-  { n: '29+',    l: 'Years in business'  },
-  { n: '5,000+', l: 'Projects completed' },
-  { n: '4th Gen',l: 'Contractor family'  },
-  { n: '13 yr',  l: 'Avg. team tenure'   },
+  { value: 29,   suffix: '+',      l: 'Years in business'  },
+  { value: 5000, suffix: '+',      l: 'Projects completed' },
+  { value: 4,    suffix: 'th Gen', l: 'Contractor family'  },
+  { value: 13,   suffix: ' yr',    l: 'Avg. team tenure'   },
 ];
 
 export default function HomePage() {
@@ -83,13 +84,16 @@ export default function HomePage() {
       {/* ══════════ FLOATING STATS ══════════ */}
       <section style={{ maxWidth: 1200, margin: '-2rem auto 0', padding: '0 1.5rem 5rem', position: 'relative', zIndex: 2 }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
-          {stats.map((s, i) => (
-            <div key={s.l} className="card reveal" data-delay={i * 80}
-              style={{ padding: '1.75rem 2rem', textAlign: 'center' }}>
-              <div className="serif" style={{ fontSize: '2.6rem', fontWeight: 500, color: '#c65b37', lineHeight: 1 }}>{s.n}</div>
-              <div style={{ fontSize: 13, color: '#78716c', marginTop: 6, fontWeight: 500 }}>{s.l}</div>
-            </div>
-          ))}
+           {stats.map((s, i) => (
+             <div key={s.l} className="card reveal" data-delay={i * 80}
+               style={{ padding: '1.75rem 2rem', textAlign: 'center' }}>
+               <div className="serif" style={{ fontSize: '2.6rem', fontWeight: 500, color: '#c65b37', lineHeight: 1 }}>
+                 <CountUp endValue={s.value} suffix={s.suffix} />
+               </div>
+               <div style={{ fontSize: 13, color: '#78716c', marginTop: 6, fontWeight: 500 }}>{s.l}</div>
+             </div>
+           ))}
+
         </div>
       </section>
 
