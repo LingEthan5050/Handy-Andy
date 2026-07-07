@@ -18,19 +18,68 @@ const input = {
 export default function ContactPage() {
   const [form,   setForm]   = useState({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry' });
   const [status, setStatus] = useState<Status>('idle');
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   useReveal();
 
   const set = (e: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLSelectElement>) =>
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
+  /**
+   * Returns the first error string if there are any errors, otherwise null
+   * ! EXPERIMENTAL: Feel free to change or add more validation checks
+   */
+  function validateForm() : string | null {
+    if (!form.name.trim()) {
+      return "Please enter your full name."
+    }
+    if (!form.email.trim()) {
+      return "Please enter your email address."
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      return "Please enter a valid email address."
+    }
+    // Phone number is optional
+    if (form.phone.trim() !== "") {
+      const phoneRegex = /^(\+?1[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+      if (!phoneRegex.test(form.phone)) return "If provided, please enter a valid phone number."
+    }
+    if (!form.message.trim()) {
+      return "Please enter a message."
+    }
+    return null
+  }
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null);
+
+    const validationErrors = validateForm()
+
+    if (validationErrors) {
+      console.error(validationErrors)
+      setErrorMsg(validationErrors);
+      setStatus('error')
+      return
+    }
+
     setStatus('loading');
     try {
       const res = await fetch('/api/contact', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) });
-      setStatus(res.ok ? 'success' : 'error');
-      if (res.ok) setForm({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry' });
-    } catch { setStatus('error'); }
+      const data = await res.json()
+      if (!res.ok) {
+        console.error(data)
+        setStatus('error')
+        setErrorMsg(data.message || data.error || "Something went wrong");
+        return
+      }
+      setStatus('success')
+      setForm({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry' });
+    } catch (err) { 
+      console.error(err)
+      setStatus('error'); 
+      setErrorMsg("Unable to connect to the server. Please try again later.");
+    }
   };
 
   return (
@@ -108,65 +157,71 @@ export default function ContactPage() {
         <div className="card reveal" data-delay="100" style={{ padding: '2.5rem' }}>
           <h2 className="serif" style={{ fontSize: 28, fontWeight: 500, color: '#1c1917', marginBottom: '1.75rem' }}>Send a Message</h2>
 
-          <form onSubmit={submit} style={{ display:'flex', flexDirection:'column', gap:20 }}>
-            {/* Inquiry type */}
-            <div>
-              <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>
-                Reason for Inquiry
-              </label>
-              <select name="inquiry" value={form.inquiry} onChange={set} style={{ ...input, appearance:'none', cursor:'pointer' }}>
-                {['General Inquiry','Getting an Estimate','Update on Current Renovation','Contractor Inquiry','Job Application','Billing Question'].map(o => (
-                  <option key={o}>{o}</option>
-                ))}
-              </select>
-            </div>
+           <form onSubmit={submit} style={{ display:'flex', flexDirection:'column', gap:20 }}>
+             <fieldset disabled={status === 'loading'} style={{ border: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 20 }}>
+               {/* Inquiry type */}
+               <div>
+                 <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>
+                   Reason for Inquiry *
+                 </label>
+                 <select name="inquiry" value={form.inquiry} onChange={set} style={{ ...input, appearance:'none', cursor:'pointer' }}>
+                   {['General Inquiry','Getting an Estimate','Update on Current Renovation','Contractor Inquiry','Job Application','Billing Question'].map(o => (
+                     <option key={o}>{o}</option>
+                   ))}
+                 </select>
+               </div>
 
-            {/* Name / Email / Phone */}
-            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16 }} className="form-three">
-              {[
-                { l:'Full Name',  n:'name',  t:'text',  req:true  },
-                { l:'Email',      n:'email', t:'email', req:true  },
-                { l:'Phone',      n:'phone', t:'tel',   req:false },
-              ].map(f => (
-                <div key={f.n}>
-                  <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>{f.l}</label>
-                  <input type={f.t} name={f.n} value={(form as Record<string,string>)[f.n]} onChange={set} required={f.req} style={input}
-                    onFocus={e => e.target.style.borderColor='#c65b37'}
-                    onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />
-                </div>
-              ))}
-            </div>
+               {/* Name / Email / Phone */}
+               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16 }} className="form-three">
+                 {[
+                   { l:'Full Name',  n:'name',  t:'text',  req:true  },
+                   { l:'Email',      n:'email', t:'email', req:true  },
+                   { l:'Phone',      n:'phone', t:'tel',   req:false },
+                 ].map(f => (
+                    <div key={f.n}>
+                      <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>{f.l}{f.req ? ' *' : ''}</label>
+                      <input type={f.t} name={f.n} value={(form as Record<string,string>)[f.n]} onChange={set} required={f.req} style={input}
+                        onFocus={e => e.target.style.borderColor='#c65b37'}
+                        onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />
+                    </div>
 
-            {/* Message */}
-            <div>
-              <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>Message</label>
-              <textarea name="message" value={form.message} onChange={set} rows={6} required
-                placeholder="Tell us about your project..."
-                style={{ ...input, resize:'vertical' }}
-                onFocus={e => e.target.style.borderColor='#c65b37'}
-                onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />
-            </div>
+                 ))}
+               </div>
 
-            <button type="submit" disabled={status==='loading'} style={{
-              background: '#c65b37', color:'#fff', border:'none', borderRadius:10,
-              padding:'14px 0', fontSize:13, fontWeight:600, letterSpacing:'.09em',
-              textTransform:'uppercase', cursor: status==='loading'?'not-allowed':'pointer',
-              opacity: status==='loading'?0.7:1, boxShadow:'0 4px 20px rgba(198,91,55,.3)',
-              transition:'background .2s',
-            }}>
-              {status === 'loading' ? 'Sending…' : 'Send Message'}
-            </button>
+               {/* Message */}
+                <div>
+                  <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>Message *</label>
+                  <textarea name="message" value={form.message} onChange={set} rows={6} required
+
+                   placeholder="Tell us about your project..."
+                   style={{ ...input, resize:'vertical' }}
+                   onFocus={e => e.target.style.borderColor='#c65b37'}
+                   onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />
+               </div>
+
+               <button type="submit" disabled={status==='loading'} style={{
+                 background: '#c65b37', color:'#fff', border:'none', borderRadius:10,
+                 padding:'14px 0', fontSize:13, fontWeight:600, letterSpacing:'.09em',
+                 textTransform:'uppercase', cursor: status==='loading'?'not-allowed':'pointer',
+                 opacity: status==='loading'?0.7:1, boxShadow:'0 4px 20px rgba(198,91,55,.3)',
+                 transition:'background .2s',
+               }}>
+                 {status === 'loading' ? 'Sending…' : 'Send Message'}
+               </button>
+             </fieldset>
+
 
             {status === 'success' && (
               <div style={{ background:'#f0fdf4', border:'1px solid #bbf7d0', color:'#166534', borderRadius:10, padding:'12px 16px', fontSize:14 }}>
                 ✅ Message sent! We'll be in touch within one business day.
               </div>
             )}
-            {status === 'error' && (
-              <div style={{ background:'#fef2f2', border:'1px solid #fecaca', color:'#991b1b', borderRadius:10, padding:'12px 16px', fontSize:14 }}>
-                ❌ Something went wrong. Please call us at 770.912.2829.
-              </div>
-            )}
+             {status === 'error' && (
+               <div style={{ background:'#fef2f2', border:'1px solid #fecaca', color:'#991b1b', borderRadius:10, padding:'12px 16px', fontSize:14 }}>
+                 ❌ {errorMsg || "Something went wrong. Please call us at 770.912.2829."}
+               </div>
+             )}
+
           </form>
         </div>
 
