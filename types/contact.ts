@@ -1,3 +1,5 @@
+import { InquiryType } from "@/generated/prisma/enums";
+
 // The raw untouched user's ContactForm
 export interface ContactForm {
     inquiry: string;
@@ -9,7 +11,7 @@ export interface ContactForm {
 
 // The cleaned version of ContactForm
 export interface ContactInquiry {
-    inquiry: string;
+    inquiry: InquiryType;
     name: string;
     email: string;
     phone: string;

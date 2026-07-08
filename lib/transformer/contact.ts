@@ -1,3 +1,4 @@
+import { InquiryType } from "@/generated/prisma/enums";
 import type { ContactForm, ContactInquiry } from "@/types/contact";
 
 function collapseWhitespace(text: string): string {
@@ -12,6 +13,31 @@ function titleCase(text: string): string {
     .join(" ");
 }
 
+function transformInquiryType(value: string): InquiryType {
+  switch (value.trim()) {
+    case "General Inquiry":
+      return InquiryType.GENERAL;
+
+    case "Getting an Estimate":
+      return InquiryType.ESTIMATE;
+
+    case "Update on Current Renovation":
+      return InquiryType.RENOVATION_UPDATE;
+
+    case "Contractor Inquiry":
+      return InquiryType.CONTRACTOR;
+
+    case "Job Application":
+      return InquiryType.JOB_APPLICATION;
+
+    case "Billing Question":
+      return InquiryType.BILLING;
+
+    default:
+      throw new Error(`Unexpected inquiry type: ${value}`);
+  }
+}
+
 export function transformContact(form: ContactForm): ContactInquiry {
   return {
     name: titleCase(collapseWhitespace(form.name)),
@@ -24,7 +50,7 @@ export function transformContact(form: ContactForm): ContactInquiry {
       ? form.phone.replace(/\D/g, "")
       : "",
 
-    inquiry: form.inquiry.trim(),
+    inquiry: transformInquiryType(form.inquiry),
 
     message: form.message.trim(),
   };

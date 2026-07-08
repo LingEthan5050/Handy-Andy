@@ -3,6 +3,7 @@ import { sendInquiryEmail } from '@/lib/email/sendInquiryEmail';
 import { validateContact } from '@/lib/validation/contact';
 import { NextResponse } from 'next/server';
 import { transformContact } from '@/lib/transformer/contact';
+import { createInquiry } from '@/lib/db/inquiry';
 
 
 export async function POST(req : Request) {
@@ -18,7 +19,7 @@ export async function POST(req : Request) {
     }
     const normalized = transformContact(body as ContactForm)
 
-    // TODO: Save to database here
+    await createInquiry(normalized)
 
     await sendInquiryEmail(normalized)
     return NextResponse.json({ success: true });
