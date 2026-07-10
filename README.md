@@ -4,11 +4,28 @@
 
 ```bash
 npm install
-cp .env.local.example .env.local   # fill in Gmail credentials
+cp .env.local.example .env.local
+```
+
+### Authentication Setup
+Before running the application, configure Google OAuth and Auth.js:
+
+1. Visit the [Google OAuth documentation](https://developers.google.com/identity/protocols/oauth2#1.-obtain-oauth-2.0-credentials-from-the-google-api-console) to create OAuth credentials.
+2. Create a Google OAuth application and obtain your **Google Client ID** and **Google Client Secret**.
+3. Generate an Auth.js secret by running:
+   ```bash
+   npx auth secret
+   ```
+4. Copy the generated secret, along with the Google Client ID and Client Secret, into your `.env.local` file.
+
+Run the development server:
+
+```bash
 npm run dev
 ```
 
 Open http://localhost:3000
+
 
 ## Add Your Images
 Drop these into `/public/` to replace placeholder images:
