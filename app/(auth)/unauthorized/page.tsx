@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 export default function UnauthorizedPage() {
   const [countdown, setCountdown] = useState(5);
+  const router = useRouter();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -16,13 +17,9 @@ export default function UnauthorizedPage() {
 
   useEffect(() => {
     if (countdown <= 0) {
-      signOut({ callbackUrl: '/' });
+      router.push('/');
     }
-  }, [countdown]);
-
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
-  };
+  }, [countdown, router]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-(--cream) p-4">
@@ -55,14 +52,14 @@ export default function UnauthorizedPage() {
         </p>
 
         <div className="mb-8 text-sm font-medium text-stone-500">
-          You will be signed out automatically in <span className="text-stone-900 font-bold">{countdown}</span> seconds.
+          Returning to the homepage in <span className="text-stone-900 font-bold">{countdown}</span> seconds...
         </div>
 
         <button
-          onClick={handleSignOut}
+          onClick={() => router.push('/')}
           className="cursor-pointer rounded-xl bg-[#c65b37] px-8 py-3.5 text-white font-semibold transition-colors duration-200 hover:bg-[#b34f2e]"
         >
-          Sign Out Now
+          Return Home Now
         </button>
       </div>
     </div>

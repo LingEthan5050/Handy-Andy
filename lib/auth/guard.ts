@@ -14,7 +14,7 @@ export async function requireAdmin() {
     session.user.role !== "ADMIN" &&
     session.user.role !== "OWNER"
   ) {
-    redirect("/unauthorized");
+    redirect("/signout?callbackUrl=/unauthorized");
   }
 
   return session.user;
