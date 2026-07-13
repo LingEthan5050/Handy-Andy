@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bell, Menu } from 'lucide-react';
+import RefreshButton from './RefreshButton';
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -29,6 +30,7 @@ export default function Header({ toggleSidebar }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-3 md:gap-4">
+        <RefreshButton />
         <div className="hidden md:block text-right">
           <p className="text-xs font-medium text-stone-900">{today}</p>
         </div>
