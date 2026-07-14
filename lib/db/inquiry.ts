@@ -1,6 +1,6 @@
 import { prisma } from './prisma';
 import { ContactInquiry } from '@/types/contact';
-import { InquiryRecord, GetInquiriesOptions, PaginatedInquiries, InquirySortOption } from '@/types/inquiry';
+import { InquiryRecord, GetInquiriesOptions } from '@/types/inquiry';
 import { InquiryStatus } from "@/generated/prisma/enums";
 
 export async function createInquiry(data: ContactInquiry) {
@@ -12,6 +12,25 @@ export async function createInquiry(data: ContactInquiry) {
         phone: data.phone,
         message: data.message,
     },
+  });
+}
+
+export async function getInquiryById(id: number) {
+  return await prisma.inquiry.findUnique({
+    where: { id },
+  });
+}
+
+export async function updateInquiryStatus(id: number, status: InquiryStatus) {
+  return await prisma.inquiry.update({
+    where: { id },
+    data: { status },
+  });
+}
+
+export async function deleteInquiry(id: number) {
+  return await prisma.inquiry.delete({
+    where: { id },
   });
 }
 

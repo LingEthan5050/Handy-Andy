@@ -3,6 +3,7 @@ import { Eye, Edit2, Trash2 } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import { InquiryRecord } from '@/types/inquiry';
 import { formatDate } from '@/lib/utils/date';
+import Link from 'next/link';
 
 interface InquiryTableProps {
   inquiries: InquiryRecord[];
@@ -25,7 +26,7 @@ export default function InquiryTable({ inquiries, activeStatus }: InquiryTablePr
               <th className="px-6 py-3 font-medium">Inquiry Type</th>
               <th className="px-6 py-3 font-medium">Status</th>
               <th className="px-6 py-3 font-medium">Date</th>
-              <th className="px-6 py-3 font-medium text-right">Actions</th>
+              <th className="px-6 py-3 font-medium">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-stone-100 text-sm">
@@ -48,16 +49,14 @@ export default function InquiryTable({ inquiries, activeStatus }: InquiryTablePr
                   </td>
                   <td className="px-6 py-4 text-stone-500">{formatDate(inquiry.createdAt)}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center justify-end gap-2">
-                      <button className="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors" title="View">
-                        <Eye className="h-4 w-4" />
-                      </button>
-                      <button className="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors" title="Edit Status">
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                      <button className="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                    <div className="flex items-center gap-2">
+                      <Link 
+                        href={`/admin/inquiries/${inquiry.id}`}
+                        className="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors" 
+                        title="See Details"
+                      >
+                        <Eye className="h-5 w-5" />
+                      </Link>
                     </div>
                   </td>
                 </tr>
