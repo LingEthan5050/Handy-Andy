@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 
 interface DeleteInquiryProps {
   inquiryId: number;
+  returnTo: string;
 }
 
-export default function DeleteInquiry({ inquiryId }: DeleteInquiryProps) {
+export default function DeleteInquiry({ inquiryId, returnTo  }: DeleteInquiryProps) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -22,7 +23,7 @@ export default function DeleteInquiry({ inquiryId }: DeleteInquiryProps) {
       const result = await deleteInquiryAction(inquiryId);
 
       if (result.success) {
-        router.replace("/admin");
+        router.replace(returnTo);
         router.refresh();
       }
     } catch (error) {

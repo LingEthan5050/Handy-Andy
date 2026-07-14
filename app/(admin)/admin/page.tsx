@@ -9,6 +9,7 @@ import InquirySort from './components/InquirySort';
 import { MessageSquare, CheckCircle2, Clock, LayoutDashboard } from 'lucide-react';
 import { InquiryStatus } from "@/generated/prisma/enums";
 import { InquirySortOption } from "@/types/inquiry";
+import Link from 'next/link';
 
 export default async function AdminDashboardPage({
   searchParams,
@@ -26,7 +27,7 @@ export default async function AdminDashboardPage({
     getDashboardStats(),
     getInquiries({
       page,
-      pageSize: 10,
+      pageSize: 5,
       status,
       sort,
     }),
@@ -64,18 +65,19 @@ export default async function AdminDashboardPage({
 
       {/* Inquiries Section */}
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <InquiryFilter baseUrl="/admin" />
-          <InquirySort baseUrl="/admin" />
-        </div>
-        
         <div className="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
-          <InquiryTable inquiries={inquiries} activeStatus={status} />
-          <Pagination 
-            currentPage={currentPage} 
-            totalPages={totalPages} 
-            baseUrl="/admin" 
-          />
+          <InquiryTable inquiries={inquiries} activeStatus={status} preview={true}/>
+          <div className="flex items-center justify-end px-6 py-4 bg-white border-t border-stone-200">
+            <Link
+              href="/admin/inquiries"
+              className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-900 transition-colors group"
+            >
+              View All
+              <span className="transition-transform duration-200 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          </div>
         </div>
       </div>
     </main>

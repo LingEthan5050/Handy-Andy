@@ -33,7 +33,7 @@ export default function InquiryFilter({ baseUrl }: InquiryFilterProps) {
   };
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2">
+    <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
       {filters.map((filter) => {
         const isActive = currentStatus === filter.value;
         return (

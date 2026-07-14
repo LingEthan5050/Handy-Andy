@@ -1,22 +1,35 @@
+'use client'
+
 import React from 'react';
 import { Eye, Edit2, Trash2 } from 'lucide-react';
 import StatusBadge from './StatusBadge';
 import { InquiryRecord } from '@/types/inquiry';
 import { formatDate } from '@/lib/utils/date';
 import Link from 'next/link';
+import { usePathname } from "next/navigation";
 
 interface InquiryTableProps {
   inquiries: InquiryRecord[];
   activeStatus?: string;
+  title?: string;
+  description?: string;
+  preview?: boolean;
 }
 
-export default function InquiryTable({ inquiries, activeStatus }: InquiryTableProps) {
+export default function InquiryTable({ 
+  inquiries, 
+  activeStatus, 
+  title = "Recent Inquiries", 
+  description = "Latest customer contact requests.",
+  preview = false 
+}: InquiryTableProps) {
+  const pathname = usePathname();
   return (
     <div className="overflow-x-auto">
       <div className="min-w-max">
         <div className="p-6 border-b border-stone-200">
-          <h3 className="text-lg font-semibold text-stone-900">Recent Inquiries</h3>
-          <p className="text-sm text-stone-500">Latest customer contact requests.</p>
+          <h3 className="text-lg font-semibold text-stone-900">{title}</h3>
+          <p className="text-sm text-stone-500">{description}</p>
         </div>
         <table className="w-full text-left border-collapse">
           <thead>
@@ -32,10 +45,19 @@ export default function InquiryTable({ inquiries, activeStatus }: InquiryTablePr
           <tbody className="divide-y divide-stone-100 text-sm">
             {inquiries.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-12 text-center text-stone-500">
-                  {activeStatus 
-                    ? `No ${activeStatus.toLowerCase()} inquiries found.` 
-                    : 'No inquiries found.'}
+                <td colSpan={6} className="px-6 py-12 text-center">
+                  {preview ? (
+                    <div className="space-y-1">
+                      <p className="text-stone-900 font-medium">No recent activity</p>
+                      <p className="text-stone-500 text-sm">New customer inquiries will appear here.</p>
+                    </div>
+                  ) : (
+                    <p className="text-stone-500">
+                      {activeStatus 
+                        ? `No ${activeStatus.toLowerCase()} inquiries found.` 
+                        : 'No inquiries found.'}
+                    </p>
+                  )}
                 </td>
               </tr>
             ) : (
@@ -51,7 +73,7 @@ export default function InquiryTable({ inquiries, activeStatus }: InquiryTablePr
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <Link 
-                        href={`/admin/inquiries/${inquiry.id}`}
+                        href={`/admin/inquiries/${inquiry.id}?returnTo=${encodeURIComponent(pathname)}`}
                         className="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors" 
                         title="See Details"
                       >

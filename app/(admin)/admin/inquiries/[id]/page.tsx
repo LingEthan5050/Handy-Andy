@@ -10,12 +10,14 @@ import DeleteInquiry from '@/app/(admin)/admin/components/inquiry-details/Delete
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ returnTo: string }>;
 }
 
-export default async function InquiryDetailPage({ params }: PageProps) {
+export default async function InquiryDetailPage({ params, searchParams }: PageProps) {
   await requireAdmin();
   
   const { id } = await params;
+  const { returnTo = "/admin" } = await searchParams;
   const inquiry = await getInquiryById(parseInt(id));
 
   if (!inquiry) {
@@ -96,7 +98,7 @@ export default async function InquiryDetailPage({ params }: PageProps) {
               <span className="text-sm font-semibold text-stone-900">Actions:</span>
               <StatusUpdate inquiryId={inquiry.id} currentStatus={inquiry.status} />
             </div>
-            <DeleteInquiry inquiryId={inquiry.id} />
+            <DeleteInquiry inquiryId={inquiry.id} returnTo={returnTo}/>
           </div>
         </div>
       </div>
