@@ -63,9 +63,9 @@ export default async function AdminDashboardPage({
 
       {/* Inquiries Section */}
       <div className="space-y-4">
-        <div className="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 shadow-sm overflow-hidden">
           <InquiryTable inquiries={inquiries} activeStatus={status} preview={true}/>
-          <div className="flex items-center justify-end px-6 py-4 bg-white border-t border-stone-200">
+          <div className="flex items-center justify-end px-6 py-4 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800">
             <Link
               href="/admin/inquiries"
               className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-900 transition-colors group"

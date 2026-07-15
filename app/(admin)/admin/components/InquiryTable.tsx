@@ -27,13 +27,13 @@ export default function InquiryTable({
   return (
     <div className="overflow-x-auto">
       <div className="min-w-max">
-        <div className="p-6 border-b border-stone-200">
-          <h3 className="text-lg font-semibold text-stone-900">{title}</h3>
-          <p className="text-sm text-stone-500">{description}</p>
+        <div className="p-6 border-b border-stone-200 dark:border-stone-800">
+          <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-100">{title}</h3>
+          <p className="text-sm text-stone-500 dark:text-stone-500">{description}</p>
         </div>
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-stone-50 text-stone-500 text-xs uppercase tracking-wider">
+            <tr className="bg-stone-50 dark:bg-stone-800 text-stone-500 dark:text-stone-500 text-xs uppercase tracking-wider">
               <th className="px-6 py-3 font-medium">Name</th>
               <th className="px-6 py-3 font-medium">Email</th>
               <th className="px-6 py-3 font-medium">Inquiry Type</th>
@@ -48,11 +48,11 @@ export default function InquiryTable({
                 <td colSpan={6} className="px-6 py-12 text-center">
                   {preview ? (
                     <div className="space-y-1">
-                      <p className="text-stone-900 font-medium">No recent activity</p>
-                      <p className="text-stone-500 text-sm">New customer inquiries will appear here.</p>
+                      <p className="text-stone-900 dark:text-stone-100 font-medium">No recent activity</p>
+                      <p className="text-stone-500 dark:text-stone-500 text-sm">New customer inquiries will appear here.</p>
                     </div>
                   ) : (
-                    <p className="text-stone-500">
+                    <p className="text-stone-500 dark:text-stone-500">
                       {activeStatus 
                         ? `No ${activeStatus.toLowerCase()} inquiries found.` 
                         : 'No inquiries found.'}
@@ -62,19 +62,19 @@ export default function InquiryTable({
               </tr>
             ) : (
               inquiries.map((inquiry) => (
-                <tr key={inquiry.id} className="hover:bg-stone-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-stone-900">{inquiry.name}</td>
-                  <td className="px-6 py-4 text-stone-600">{inquiry.email}</td>
-                  <td className="px-6 py-4 text-stone-600">{inquiry.inquiry}</td>
+                <tr key={inquiry.id} className="hover:bg-stone-50 hover:dark:bg-stone-800 transition-colors">
+                  <td className="px-6 py-4 font-medium text-stone-900 dark:text-stone-100">{inquiry.name}</td>
+                  <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{inquiry.email}</td>
+                  <td className="px-6 py-4 text-stone-600 dark:text-stone-400">{inquiry.inquiry}</td>
                   <td className="px-6 py-4">
                     <StatusBadge status={inquiry.status} />
                   </td>
-                  <td className="px-6 py-4 text-stone-500">{formatDate(inquiry.createdAt)}</td>
+                  <td className="px-6 py-4 text-stone-500 dark:text-stone-500">{formatDate(inquiry.createdAt)}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <Link 
                         href={`/admin/inquiries/${inquiry.id}?returnTo=${encodeURIComponent(pathname)}`}
-                        className="p-1.5 text-stone-400 hover:text-stone-600 hover:bg-stone-100 rounded transition-colors" 
+                        className="p-1.5 text-stone-400 hover:text-stone-600 hover:dark:text-stone-400 hover:bg-stone-100 hover:dark:bg-stone-800 rounded transition-colors" 
                         title="See Details"
                       >
                         <Eye className="h-5 w-5" />

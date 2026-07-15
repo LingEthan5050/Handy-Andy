@@ -30,7 +30,7 @@ export default function InquirySort({ baseUrl }: InquirySortProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="sort-select" className="text-sm text-stone-500 whitespace-nowrap">
+      <label htmlFor="sort-select" className="text-sm text-stone-500 dark:text-stone-500 whitespace-nowrap">
         Sort by:
       </label>
       <div className="relative">
@@ -38,7 +38,7 @@ export default function InquirySort({ baseUrl }: InquirySortProps) {
           id="sort-select"
           value={currentSort}
           onChange={(e) => handleSortChange(e.target.value)}
-          className="appearance-none bg-white border border-stone-200 text-stone-700 text-sm rounded-lg focus:ring-stone-500 focus:border-stone-500 block w-full p-2.5 pr-10 pl-3 transition-all"
+          className="appearance-none bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 text-sm rounded-lg focus:ring-stone-500 focus:border-stone-500 block w-full p-2.5 pr-10 pl-3 transition-all"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>

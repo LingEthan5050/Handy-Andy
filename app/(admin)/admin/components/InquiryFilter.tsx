@@ -43,7 +43,7 @@ export default function InquiryFilter({ baseUrl }: InquiryFilterProps) {
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 whitespace-nowrap ${
               isActive 
                 ? 'bg-stone-900 text-white shadow-sm' 
-                : 'bg-white text-stone-600 border border-stone-200 hover:bg-stone-50 hover:text-stone-900'
+                : 'bg-white dark:bg-stone-900 text-stone-600 dark:text-stone-400 border border-stone-200 dark:border-stone-800 hover:bg-stone-50 hover:dark:bg-stone-950 hover:text-stone-900 hover:dark:text-stone-100'
             }`}
           >
             {filter.label}

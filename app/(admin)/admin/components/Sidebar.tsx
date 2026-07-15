@@ -10,7 +10,7 @@ const navItems = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Inquiries', href: '/admin/inquiries', icon: MessageSquare },
   { name: 'Admin Users', href: '#', icon: Users, disabled: true },
-  { name: 'Settings', href: '#', icon: Settings, disabled: true },
+  { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];
 
 interface SidebarProps {
@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
 
       {/* Sidebar */}
        <aside className={`
-         fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-stone-200 flex flex-col transition-transform duration-300 ease-in-out
+         fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-800 flex flex-col transition-transform duration-300 ease-in-out
          lg:sticky lg:top-0 lg:h-screen lg:overflow-y-auto lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
        `}>
         <div className="p-6 flex items-center justify-between">
@@ -41,11 +41,11 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
             <div className="bg-[#c65b37] p-1.5 rounded-lg">
               <Hammer className="h-6 w-6 text-white" />
             </div>
-            <span className="font-bold text-stone-900 text-lg tracking-tight">HandyANDY</span>
+            <span className="font-bold text-stone-900 dark:text-stone-100 text-lg tracking-tight">HandyANDY</span>
           </div>
           <button 
             onClick={closeSidebar} 
-            className="lg:hidden p-2 text-stone-400 hover:text-stone-600 rounded-lg transition-colors"
+            className="lg:hidden p-2 text-stone-400 hover:text-stone-600 hover:dark:text-stone-400 rounded-lg transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -65,8 +65,8 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
                   item.disabled 
                     ? 'text-stone-400 cursor-not-allowed pointer-events-none' 
                     : isActive 
-                      ? 'bg-stone-100 text-stone-900' 
-                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                      ? 'bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100' 
+                      : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 hover:dark:bg-stone-950 hover:text-stone-900 hover:dark:text-stone-100'
                 }`}
               >
                 <Icon className={`h-4 w-4 ${isActive ? 'text-stone-900' : 'text-stone-400'}`} />

@@ -32,9 +32,9 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
   };
 
   return (
-    <div className="flex items-center justify-between px-6 py-4 bg-white border-t border-stone-200">
-      <div className="text-sm text-stone-500">
-        Page <span className="font-medium text-stone-900">{currentPage}</span> of <span className="font-medium text-stone-900">{totalPages}</span>
+    <div className="flex items-center justify-between px-6 py-4 bg-white dark:bg-stone-900 border-t border-stone-200 dark:border-stone-800">
+      <div className="text-sm text-stone-500 dark:text-stone-500">
+        Page <span className="font-medium text-stone-900 dark:text-stone-100">{currentPage}</span> of <span className="font-medium text-stone-900 dark:text-stone-100">{totalPages}</span>
       </div>
       
       <div className="flex items-center gap-1">
@@ -42,7 +42,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
           href={currentPage > 1 ? createPageUrl(currentPage - 1) : '#'}
           className={`p-2 rounded-lg transition-colors ${
             currentPage > 1 
-              ? 'text-stone-600 hover:bg-stone-100' 
+              ? 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800' 
               : 'text-stone-300 pointer-events-none'
           }`}
           aria-label="Previous Page"
@@ -58,7 +58,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
               className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                 page === currentPage 
                   ? 'bg-stone-900 text-white' 
-                  : 'text-stone-600 hover:bg-stone-100'
+                  : 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'
               }`}
             >
               {page}
@@ -70,7 +70,7 @@ export default function Pagination({ currentPage, totalPages, baseUrl }: Paginat
           href={currentPage < totalPages ? createPageUrl(currentPage + 1) : '#'}
           className={`p-2 rounded-lg transition-colors ${
             currentPage < totalPages 
-              ? 'text-stone-600 hover:bg-stone-100' 
+              ? 'text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800' 
               : 'text-stone-300 pointer-events-none'
           }`}
           aria-label="Next Page"
