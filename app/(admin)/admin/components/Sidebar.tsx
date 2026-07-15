@@ -77,7 +77,7 @@ export default function Sidebar({ isOpen, closeSidebar }: SidebarProps) {
           })}
         </nav>
 
-        <AdminProfile name="Administrator" email="admin@handyandy.com" />
+        <AdminProfile />
       </aside>
     </>
   );
