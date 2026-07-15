@@ -1,4 +1,3 @@
-import { requireAdmin } from "@/lib/auth/guard";
 import { getInquiries } from "@/lib/db/inquiry";
 import { getDashboardStats } from "@/lib/db/stats";
 import StatsCard from './components/StatsCard';
@@ -16,7 +15,6 @@ export default async function AdminDashboardPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  await requireAdmin();
   
   const params = await searchParams;
   const page = Number(params.page) || 1;
