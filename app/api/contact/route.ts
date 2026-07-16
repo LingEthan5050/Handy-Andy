@@ -4,13 +4,38 @@ import { validateContact } from '@/lib/validation/contact';
 import { NextResponse } from 'next/server';
 import { transformContact } from '@/lib/transformer/contact';
 import { createInquiry } from '@/lib/db/inquiry';
+import { headers } from "next/headers";
+import { contactRateLimiter } from "@/lib/rate-limit/contactRateLimiter";
 
 
 export async function POST(req : Request) {
   try {
-    const body : unknown = await req.json();
+    const headersList = await headers();
+    const ip = headersList.get("x-forwarded-for")?.split(",")[0].trim();
 
-    // TODO: Add middleware functions here
+    if (!ip) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unable to determine client identity.",
+        },
+        { status: 400 }
+      );
+    }
+    const result = await contactRateLimiter.limit(ip);
+
+    if (!result.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "Too many requests. Please try again later.",
+        },
+        { status: 429 }
+      );
+    }
+
+    const body : unknown = await req.json();
     
     const validation = validateContact(body);
 
