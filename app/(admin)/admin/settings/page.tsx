@@ -3,12 +3,18 @@
 import Image from 'next/image';
 import { useAdmin } from '@/app/providers/AdminProvider';
 import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 
 export default function SettingsPage() {
+    const [mounted, setMounted] = useState(false);
     const { theme, setTheme } = useTheme();
     const user = useAdmin();
 
-    const isSelected = (value: "light" | "dark" | "system") => theme === value;
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    const isSelected = (value: "light" | "dark" | "system") => mounted && theme === value;
     
     const displayRole =
         user.role.charAt(0) + user.role.slice(1).toLowerCase();
