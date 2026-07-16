@@ -16,7 +16,7 @@ const input = {
 };
 
 export default function ContactPage() {
-  const [form,   setForm]   = useState({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry' });
+  const [form,   setForm]   = useState({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry', reason: '' });
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   useReveal();
@@ -41,7 +41,7 @@ export default function ContactPage() {
     }
     // Phone number is optional
     if (form.phone.trim() !== "") {
-      const phoneRegex = /^(\+?1[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+      const phoneRegex = /^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$/;
       if (!phoneRegex.test(form.phone)) return "If provided, please enter a valid phone number."
     }
     if (!form.message.trim()) {
@@ -74,7 +74,7 @@ export default function ContactPage() {
         return
       }
       setStatus('success')
-      setForm({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry' });
+      setForm({ name:'', email:'', phone:'', message:'', inquiry:'General Inquiry', reason:'' });
     } catch (err) { 
       console.error(err)
       setStatus('error'); 
@@ -194,6 +194,16 @@ export default function ContactPage() {
                   <textarea name="message" value={form.message} onChange={set} rows={6} required
 
                    placeholder="Tell us about your project..."
+                   style={{ ...input, resize:'vertical' }}
+                   onFocus={e => e.target.style.borderColor='#c65b37'}
+                   onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />
+               </div>
+
+                <div className='hidden'>
+                  <label style={{ fontSize:12, fontWeight:600, letterSpacing:'.08em', textTransform:'uppercase', color:'#a8a29e', display:'block', marginBottom:8 }}>Reason for Inquiry *</label>
+                  <textarea name="reason" value={form.message} onChange={set} rows={6}
+
+                   placeholder="Tell us about yourself..."
                    style={{ ...input, resize:'vertical' }}
                    onFocus={e => e.target.style.borderColor='#c65b37'}
                    onBlur={e  => e.target.style.borderColor='rgba(28,25,23,.15)'} />

@@ -37,6 +37,11 @@ export async function POST(req : Request) {
 
     const body : unknown = await req.json();
     
+    const form = body as Partial<ContactForm>;
+    if (form.reason?.trim()) {
+      return NextResponse.json({ success: true });
+    }
+
     const validation = validateContact(body);
 
     if (!validation.valid) {

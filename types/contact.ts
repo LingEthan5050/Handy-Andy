@@ -7,6 +7,8 @@ export interface ContactForm {
     email: string;
     phone: string;
     message: string;
+    
+    reason?: string;
 }
 
 // The cleaned version of ContactForm

@@ -58,7 +58,7 @@ export function validateContact(body : unknown ) : ValidationResult {
 
   // Phone (optional)
   if (form.phone?.trim()) {
-    const phoneRegex = /^(\+?1[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$/;
+    const phoneRegex = /^(?:\+?1[-.\s]?)?(?:\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$/;
 
     if (!phoneRegex.test(form.phone)) {
       return {
