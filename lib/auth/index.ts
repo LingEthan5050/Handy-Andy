@@ -28,11 +28,15 @@ export const authOptions: NextAuthOptions = {
           email: session.user.email,
         },
         select: {
+          name: true,
+          image: true,
           role: true,
         },
       });
 
       if (dbUser) {
+        session.user.name = dbUser.name ?? session.user.name;
+        session.user.image = dbUser.image ?? session.user.image
         session.user.role = dbUser.role;
       }
 

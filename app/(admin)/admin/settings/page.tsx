@@ -3,10 +3,16 @@
 import Image from 'next/image';
 import { useAdmin } from '@/app/providers/AdminProvider';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { CldUploadWidget, type CloudinaryUploadWidgetResults } from "next-cloudinary";
+import { useRouter } from 'next/navigation';
+import { Pencil } from "lucide-react";
+import { updateAvatarAction } from '../actions/update-avatar';
 
 export default function SettingsPage() {
     const [mounted, setMounted] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
+    const router = useRouter()
     const { theme, setTheme } = useTheme();
     const user = useAdmin();
 
@@ -29,6 +35,27 @@ export default function SettingsPage() {
         .slice(0, 2)
         .toUpperCase();
 
+    const handleUpload = useCallback(async (result: CloudinaryUploadWidgetResults) => {
+        if (
+            typeof result.info !== "object" ||
+            !result.info ||
+            !("secure_url" in result.info) ||
+            !("public_id" in result.info)
+        ) return 
+
+        setIsUploading(true)
+
+        try {
+            await updateAvatarAction({
+                image: result.info.secure_url as string,
+                publicId: result.info.public_id as string,
+            });
+
+            router.refresh();
+        } finally {
+            setIsUploading(false)
+        }
+    }, []);
 
     return (
         <main className="mx-auto w-full max-w-5xl space-y-8 p-4 md:p-8">
@@ -47,19 +74,48 @@ export default function SettingsPage() {
                 <div className="space-y-8 p-6">
                     {/* Avatar */}
                     <div className="flex items-center gap-4">
-                        <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-stone-200 text-xl font-semibold text-stone-600 dark:text-stone-400">
-                            {user.image ? (
-                                <Image
-                                src={user.image}
-                                alt={displayName}
-                                width={80}
-                                height={80}
-                                className="h-full w-full object-cover"
-                                />
-                            ) : (
-                                initials
+                        <CldUploadWidget
+                            uploadPreset="admin_avatar"
+                            options={{
+                                multiple: false,
+                                maxFiles: 1,
+                                cropping: true,
+                                croppingAspectRatio: 1,
+                            }}
+                            onSuccess={handleUpload}
+                        >
+                            {({ open }) => (
+                                <button
+                                    type="button"
+                                    onClick={() => open()}
+                                    className="group relative cursor-pointer"
+                                >
+                                    <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-stone-200 text-xl font-semibold text-stone-600 dark:text-stone-400 ring-2 ring-transparent transition-all group-hover:ring-stone-300 dark:group-hover:ring-stone-700">
+                                        {user.image ? (
+                                            <Image
+                                                src={user.image}
+                                                alt={displayName}
+                                                width={80}
+                                                height={80}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            initials
+                                        )}
+                                    </div>
+
+                                    {/* Hover Overlay */}
+                                    <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                                        <Pencil className="h-5 w-5 text-white" />
+                                    </div>
+
+                                    {/* Floating Edit Badge */}
+                                    <div className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white dark:border-stone-900 bg-stone-900 text-white shadow-md transition-colors group-hover:bg-stone-700">
+                                        <Pencil className="h-3.5 w-3.5" />
+                                    </div>
+                                </button>
                             )}
-                        </div>
+                        </CldUploadWidget>
 
                         <div>
                             <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-100">
@@ -67,7 +123,7 @@ export default function SettingsPage() {
                             </h3>
 
                             <p className="mt-1 text-sm text-stone-500 dark:text-stone-500">
-                                {`${displayRole} Account`}
+                                {displayRole} Account
                             </p>
                         </div>
                     </div>
